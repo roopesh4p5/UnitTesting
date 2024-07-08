@@ -1,0 +1,57 @@
+<div class="flex h-screen">
+    <!-- Sidebar -->
+    <div class="bg-gray-800 text-white w-64 fixed left-0 top-0 h-screen transform transition-all ease-in-out duration-300"
+         [ngClass]="{'transform-hidden': sidebarClosed, 'transform-visible': !sidebarClosed}">
+      <div class="flex justify-between items-center h-16 px-6 border-b border-gray-700">
+        <span class="text-xl font-semibold">ANGULAR</span>
+      </div>
+      <div class="overflow-y-auto">
+        <ul class="py-4">
+          <li routerLink="/chapter1" class="px-6 py-2  hover:bg-gray-700">
+            <a routerLinkActive="font-bold" class="flex"><div class="pr-1">1. </div> <div>Introduction to Automated Testing</div></a>
+          </li>
+          <li routerLink="/chapter2" class="px-6 py-2 hover:bg-gray-700">
+            <a routerLinkActive="font-bold" class="flex"><div class="pr-1">2. </div> <div>Different types of tests</div></a>
+          </li>
+          <li routerLink="/chapter3" class="px-6 py-2 hover:bg-gray-700">
+            <a routerLinkActive="font-bold" class="flex"><div class="pr-1">3. </div> <div> The Angular Testing Tools-Toolchain</div></a>
+          </li>
+          <li routerLink="/chapter4" class="px-6 py-2 hover:bg-gray-700">
+            <a routerLinkActive="font-bold" class="flex"><div class="pr-1">4. </div> <div> Setup Angular Test</div></a>
+
+          </li>
+          <li routerLink="/chapter5" class="px-6 py-2 hover:bg-gray-700">
+            <a routerLinkActive="font-bold" class="flex"><div class="pr-1">5. </div> <div> Advanced Angular Testing Techniques</div></a>
+
+          </li>
+          <li routerLink="/chapter6" class="px-6 py-2 hover:bg-gray-700">
+            <a routerLinkActive="font-bold" class="flex"><div class="pr-1">6. </div> <div>Starting with Unit Testing</div></a>
+
+          </li>
+          <li routerLink="/chapter7" class="px-6 py-2 hover:bg-gray-700">
+            <a routerLinkActive="font-bold" class="flex"><div class="pr-1">7. </div> <div>Code Coverage</div></a>
+
+          </li>
+          <li routerLink="/chapter8" class="px-6 py-2 hover:bg-gray-700">
+            <a routerLinkActive="font-bold" class="flex"><div class="pr-1">8. </div> <div>Working with Integration Testing</div></a>
+
+          </li>
+        </ul>
+      </div>
+    </div>
+  
+    <!-- Main content -->
+    <div class="flex-1 transition-all ease-in-out duration-300"
+         [ngClass]="{'ml-64': !sidebarClosed, 'ml-0': sidebarClosed}">
+      <div class="flex fixed w-full top-0 bg-gray-800 text-white items-center h-16 px-6 border-b border-gray-700">
+        <button class="mr-3" (click)="toggleSidebar()">
+          <i class="bi" [ngClass]="{'bi-chevron-left': !sidebarClosed, 'bi-chevron-right': sidebarClosed}"></i>
+        </button>
+        <span class="text-xl pl-4 font-semibold">Unit Testing  > {{ chapter }}</span>
+      </div>
+      <div class="m-6 mt-16">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+  

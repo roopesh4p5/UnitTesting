@@ -1,0 +1,13 @@
+  .transform {
+    transition-property: transform;
+  }
+  
+  .transform-hidden {
+    transform: translateX(-100%);
+  }
+  
+  .transform-visible {
+    transform: translateX(0);
+  }
+
+  

@@ -1,0 +1,272 @@
+<div class="max-w-3xl mx-auto p-4">
+
+    <h1 class="text-3xl font-bold mb-4">8. Working with Integration Testing</h1>
+    
+    <h2 class="text-xl font-bold mb-2">8.1. Integration Test-Setup</h2>
+    <p>
+        In a simple isolated unit test, we can create a new component as <code>new ComponentName</code>. But in case of integration test, we need to ask Angular to create an instance of the component with TestBed utility. TestBed class provides various utility methods to deal with test cases.
+    </p>
+    
+    <h3 class="text-lg font-bold mb-2">Syntax & Example: Basic setup to write integration tests - name.component.spec.ts</h3>
+    <pre class="bg-gray-100 p-4 rounded-md"><code>
+    import &#123; TestBed, ComponentFixture &#125; from '@angular/core/testing';
+    
+    describe('test-suite-group-name', () => &#123;
+    
+      let component: ComponentName;
+      let fixture: ComponentFixture&lt;ComponentName&gt;;
+    
+      beforeEach(() => &#123;
+        TestBed.configureTestingModule(&#123;
+          imports: [Dependency ModuleName],
+          providers: [Dependency ServicesName],
+          declarations: [Current ComponentName, Dependency ComponentName]
+        &#125;);
+    
+        fixture = TestBed.createComponent(ComponentName);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+      &#125;);
+    
+    &#125;);
+    </code></pre>
+    
+    <h2 class="text-xl font-bold mb-2 mt-4">8.2. Integration Test-Generating setup code</h2>
+    <p>
+        Creating an integration .spec test file every time manually is pretty time consuming also there are chances of an error. It is advisable to use Angular CLI to generate components/services/directives/routings, etc. as Angular CLI generates basic setup code respective to component/test/.spec files.
+    </p>
+    
+    <h3 class="text-lg font-bold mb-2">Angular CLI command to generate component:</h3>
+    <pre class="bg-gray-100 p-4 rounded-md"><code>
+    ng generate component component-name OR
+    ng g c component-name
+    </code></pre>
+    
+    <h3 class="text-lg font-bold mb-2">Syntax & Example: Default code in app.component.spec.ts</h3>
+    <pre class="bg-gray-100 p-4 rounded-md"><code>
+    import &#123; TestBed, async &#125; from '@angular/core/testing';
+    import &#123; AppComponent &#125; from './app.component';
+    
+    describe('AppComponent', () => &#123;
+      beforeEach(async(() => &#123;
+        TestBed.configureTestingModule(&#123;
+          declarations: [
+            AppComponent
+          ],
+        &#125;).compileComponents();
+      &#125;));
+    
+      it('should create the app', async(() => &#123;
+        const fixture = TestBed.createComponent(AppComponent);
+        const app = fixture.debugElement.componentInstance;
+        expect(app).toBeTruthy();
+      &#125;));
+    
+      it(`should have as title 'app'`, async(() => &#123;
+        const fixture = TestBed.createComponent(AppComponent);
+        const app = fixture.debugElement.componentInstance;
+        expect(app.title).toEqual('app');
+      &#125;));
+    
+      it('should render title in a h1 tag', async(() => &#123;
+        const fixture = TestBed.createComponent(AppComponent);
+        fixture.detectChanges();
+        const compiled = fixture.debugElement.nativeElement;
+        expect(compiled.querySelector('h1').textContent).toContain('Welcome to app!');
+      &#125;));
+    &#125;);
+    </code></pre>
+    
+    <h2 class="text-xl font-bold mb-2 mt-4">8.3. ATB Angular TestBed</h2>
+    <h3 class="text-lg font-bold mb-2">8.3.1. What is ATB Angular TestBed?</h3>
+    <p>
+        TestBed is the primary API for writing unit tests for Angular applications and libraries. It provides various utility methods to configure and initialize the environment for unit testing and create components and services.
+    </p>
+    
+    <h3 class="text-lg font-bold mb-2">8.3.2. When to Use Angular Test Bed?</h3>
+    <p>
+        We need to use Angular Test Bed to perform unit testing for various Angular-specific features including template interactions, change detection, dependency injection, and user interactions.
+    </p>
+    
+    <h3 class="text-lg font-bold mb-2">8.3.3. Component fixture</h3>
+    <p>
+        We can create a component fixture with TestBed.createComponent(), Fixtures have access to a debugElement, which will give you access to the internals of the component fixture.
+    </p>
+    
+    <h2 class="text-xl font-bold mb-2 mt-4">8.4. Integration Test-Property binding</h2>
+    <p>
+        Note: What to test?
+    </p>
+    
+    <p>
+        All types of bindings: property binding, class binding, style binding, event binding
+    </p>
+    
+    <h3 class="text-lg font-bold mb-2">Syntax & Example: 02-integration-test/01-property-binding/counter-property-binding.component.html</h3>
+    <pre class="bg-gray-100 p-4 rounded-md"><code>
+    &lt;div class="counter-container"&gt;
+        &lt;span class="icon-menu-up count-button" [class.highlighted]="myCount == 1" (click)="upCount()"&gt;
+            Up Count
+        &lt;/span&gt;
+    
+        Total:
+        &lt;span class="totalCountText"&gt;&#123;&#123; totalCounts &#125;&#125;&lt;/span&gt;
+    
+        &lt;span class="icon-menu-down count-button" [class.highlighted]="myCount == -1" (click)="downCount()"&gt;
+            Down Count
+        &lt;/span&gt;
+    &lt;/div&gt;
+    </code></pre>
+    
+    <h3 class="text-lg font-bold mb-2">Syntax & Example: 02-integration-test/01-property-binding/counter-property-binding.component.spec.ts</h3>
+    <pre class="bg-gray-100 p-4 rounded-md"><code>
+    import &#123; async, ComponentFixture, TestBed &#125; from '@angular/core/testing';
+    import &#123; By &#125; from "@angular/platform-browser";
+    
+    import &#123; CounterPropertyBindingComponent &#125; from './counter-property-binding.component';
+    
+    describe('CounterPropertyBindingComponent', () => &#123;
+      let component: CounterPropertyBindingComponent;
+      let fixture: ComponentFixture&lt;CounterPropertyBindingComponent&gt;;
+    
+      beforeEach(async(() => &#123;
+        TestBed.configureTestingModule(&#123;
+          declarations: [CounterPropertyBindingComponent]
+        &#125;)
+          .compileComponents();
+      &#125;));
+    
+      beforeEach(() => &#123;
+        fixture = TestBed.createComponent(CounterPropertyBindingComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+      &#125;);
+    
+      it('should create CounterPropertyBindingComponent', () => &#123;
+        expect(component).toBeTruthy();
+      &#125;);
+    
+      /* binding property - interpolation */
+      it('should bind-show-render totalCount', () => &#123;
+        component.othersCount = 10
+        component.myCount = 5;
+        fixture.detectChanges();
+    
+        let totalCountTextElement = fixture.debugElement.queryAll(By.css('span'));
+        let totalCountTextNativeElement: HTMLElement = totalCountTextElement[1].nativeElement;
+    
+        expect(totalCountTextNativeElement.getAttribute('class')).toBe('totalCountText');
+        // expect(totalCountTextNativeElement.innerText).toContain(15);
+      &#125;);
+    
+      /* binding style/class */
+      it('should highlight the upCount button if totalCounts is 1', () => &#123;
+        component.myCount = 1;
+        fixture.detectChanges();
+    
+        let upCountButtonElement = fixture.debugElement.query(By.css('.icon-menu-up.count-button'));
+    
+        expect(upCountButtonElement.classes['highlighted']).toBeTruthy();
+      &#125;);
+    
+      /* binding event */
+      it('should increase totalCounts by 1 when upCount button clicked', () => &#123;
+        let upCountButtonElement = fixture.debugElement.query(By.css('.icon-menu-up.count-button'));
+    
+        upCountButtonElement.triggerEventHandler('click', null);
+    
+        expect(component.totalCounts).toEqual(1);
+      &#125;);
+    &#125;);
+    </code></pre>
+    
+    <h2 class="text-xl font-bold mb-2 mt-4">8.5. Integration Test-Event binding</h2>
+    <h3 class="text-lg font-bold mb-2">Syntax & Example: event-binding.component.spec.ts</h3>
+    <pre class="bg-gray-100 p-4 rounded-md"><code>
+    /* binding event */
+    it('should increase totalCounts by 1 when upCount button clicked', () => &#123;
+      let upCountButtonElement = fixture.debugElement.query(By.css('.icon-menu-up.count-button'));
+      
+      upCountButtonElement.triggerEventHandler('click', null);
+    
+      // component.upCount();
+    
+      expect(component.totalCounts).toEqual(1);
+    &#125;);
+    </code></pre>
+    
+    <h2 class="text-xl font-bold mb-2 mt-4">8.6. fixture detectChanges</h2>
+    <p>
+        In Angular application whenever we make any changes in DOM element, Angular runs its change Detection algorithm automatically
+    </p>
+    
+    <h3 class="text-lg font-bold mb-2">Syntax & Example: fixture.detectChanges()</h3>
+    <pre class="bg-gray-100 p-4 rounded-md"><code>
+    it('should highlight the upCount button if totalCounts is 1', () => &#123;
+        component.myCount = 1;
+        fixture.detectChanges();
+    
+        let upCountButtonElement = fixture.debugElement.query(By.css('count-button'));
+    
+        expect(upCountButtonElement.classes['highlighted']).toBeTruthy();
+    &#125;);
+    </code></pre>
+    
+    <h2 class="text-xl font-bold mb-2 mt-4">8.7. Integration Test-Providing dependencies</h2>
+    <p>
+        In case of Unit test, we use to provide dependencies used in constructor as loginFormComponent = new LoginFormComponent(new FormBuilder);
+    </p>
+    
+    <h3 class="text-lg font-bold mb-2">Syntax & Example: Providers in Integration test:</h3>
+    <pre class="bg-gray-100 p-4 rounded-md"><code>
+    import &#123; Dependency ServicesName &#125; from './path';
+    
+    TestBed.configureTestingModule(&#123;
+        imports: [ Dependency ModuleName, HttpModule ],
+        providers: [ Dependency ServicesName, DataService ],
+        declarations: [ Current ComponentName, Dependency ComponentName, EmployeeComponents ]
+    &#125;);
+    </code></pre>
+    
+    <h2 class="text-xl font-bold mb-2 mt-4">8.8. Testing OnInit ngOnInit</h2>
+    <p>
+        In Angular application, ngOnInit method is called by Angular automatically at the time of component initialization
+    </p>
+    
+    <h3 class="text-lg font-bold mb-2">Syntax & Example: module level service dependencies inserted under providers arrays</h3>
+    <pre class="bg-gray-100 p-4 rounded-md"><code>
+    @NgModule(&#123;
+        imports: [ 
+            CommonModule
+        ],
+        providers: [
+            LoginService,
+            AuthenticationService,
+        ],
+        declarations: [ LoginComponent ]
+    &#125;)
+    </code></pre>
+    
+    <h2 class="text-xl font-bold mb-2 mt-4">8.9. Why do we use NO ERRORS SCHEMA</h2>
+    <h3 class="text-lg font-bold mb-2">8.9.1. What is NO_ERRORS_SCHEMA</h3>
+    <p>
+        Defines a schema that allows any property on any element, so Angular Test ignores any custom elements, attributes in HTML file while testing.
+    </p>
+    
+    <p>Link: <a href="https://medium.com/bb-tutorials-and-thoughts/angular-a-comprehensive-guide-to-unit-testing-with-angular-and-best-practices-e1f9ef752e4e" class="text-blue-500 hover:underline">Angular Unit Testing Guide</a></p>
+    
+    <h3 class="text-lg font-bold mb-2">8.9.2. Why you shouldn't use NO_ERRORS_SCHEMA in Angular Unit Tests</h3>
+    <p>
+        NO_ERRORS_SCHEMA simply telling the TestBed to ignore any template errors. So, while testing when it hits <code>&lt;header-component&gt;</code> tag, you don't have to import HeaderComponent into your TestBed in your spec file. Angular will just treat that tag like any old div and continue on its way.
+    </p>
+    
+    <div class="flex justify-between mt-6">
+        <button routerLink="/chapter7" class="px-6 py-2 border-2 rounded-md">
+            <a routerLinkActive="font-bold">Prev page</a>
+        </button>
+        <button routerLink="/chapter9" class="px-6 py-2 border-2 rounded-md">
+            <a routerLinkActive="font-bold">Next page</a>
+        </button>
+    </div>
+    
+    </div>
