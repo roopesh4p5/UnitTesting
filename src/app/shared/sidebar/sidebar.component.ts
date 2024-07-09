@@ -1,6 +1,5 @@
-// sidebar.component.ts
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd, Event } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -9,52 +8,34 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
-  sidebarClosed: boolean = false;
-  chapter: string = "Angular Unit Testing";
+  sidebarClosed = false;
+  chapter = 'Angular Unit Testing';
+  chapterTitles: Record<string, string> = {
+    '/chapter1': 'Introduction to Automated Testing',
+    '/chapter2': 'Different types of tests',
+    '/chapter3': 'The Angular Testing Tools-Toolchain',
+    '/chapter4': 'Setup Angular Test',
+    '/chapter5': 'Advanced Angular Testing Techniques',
+    '/chapter6': 'Starting with Unit Testing',
+    '/chapter7': 'Code Coverage',
+    '/chapter8': 'Working with Integration Testing'
+  };
 
   constructor(private router: Router) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.router.events.pipe(
-      filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd)
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
       this.updateChapter(event.urlAfterRedirects);
     });
   }
 
-  toggleSidebar() {
+  toggleSidebar(): void {
     this.sidebarClosed = !this.sidebarClosed;
   }
 
-  private updateChapter(url: string) {
-    switch (url) {
-      case '/chapter1':
-        this.chapter = "Introduction to Automated Testing";
-        break;
-      case '/chapter2':
-        this.chapter = "Different types of tests";
-        break;
-      case '/chapter3':
-        this.chapter = "The Angular Testing Tools-Toolchain";
-        break;
-      case '/chapter4':
-        this.chapter = "Setup Angular Test";
-        break;
-      case '/chapter5':
-        this.chapter = "Advanced Angular Testing Techniques";
-        break;
-      case '/chapter6':
-        this.chapter = "Starting with Unit Testing";
-        break;
-      case '/chapter7':
-        this.chapter = "Code Coverage";
-        break;
-      case '/chapter8':
-        this.chapter = "Working with Integration Testing";
-        break;
-      default:
-        this.chapter = "Angular Unit Testing";
-        break;
-    }
+  private updateChapter(url: string): void {
+    this.chapter = this.chapterTitles[url] || 'Angular Unit Testing';
   }
 }
